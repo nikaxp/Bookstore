@@ -1,9 +1,7 @@
 $(function () {
-<<<<<<< HEAD
+
      //showModal('to tylko test');
-=======
-    // showModal('to tylko test');
->>>>>>> origin/api_v2
+
 });
 
 function showModal(msg) {
