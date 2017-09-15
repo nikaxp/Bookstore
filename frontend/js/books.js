@@ -84,7 +84,7 @@ $(function() {
             });
         
     }
-    getAllBooks();
+    //getAllBooks();
     
     
     /*** wyświetlenie opisu książki ***/
@@ -142,25 +142,47 @@ $(function() {
     
     /*** edycja książki ***/
     
-    function editBook() {
+    function chooseToEdit() {
         
         $(document).on('change', "#bookEditSelect", function(e) {
-            var id = $(this).attr("data-id");
+            
+            $("#bookEdit").show(); // pokaz formularz edycji
                 
-
-                $.ajax({
-                        url: '/rest/rest.php/book/'+ id,
-                        method: 'PATCH',
-                        dataType: 'json',
-
-                    }).done( function (result) {
-                        
-                    });
-
         });
     }
     
+    chooseToEdit();
+    
+    function editBook() {
+        $(document).on('submit', "#bookEdit", function(e) {
+            e.preventDefault();
+            var id = $("#bookEditSelect").val(); // val zwroci id ksiazki
+            var title = $('body #title').eq(1).val();
+            var description = $('body #description').eq(1).val();
+            
+            var newBook = {
+                title: title,
+                description: description
+            };
+            
+             // AJAX
+            $.ajax({
+                url: '../rest/rest.php/book/'+id,
+                method: 'PATCH',
+                dataType: 'json',
+                data: newBook
+            }).done( function (result) {
+                
+                
+            });
+        
+        
+           $("#bookEdit").hide(); 
+        });
+
+    }
     editBook();
+    getAllBooks();
     
    
     
