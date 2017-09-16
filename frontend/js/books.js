@@ -10,8 +10,9 @@ $(function() {
             
             var title = $(this).find("#title");
             var description = $(this).find("#description");
+            var authorId = $(this).find('#author_id');
             
-            if( title.val().length === 0 || description.val().length === 0 ) {
+            if( title.val().length === 0 || description.val().length === 0 || authorId.val().length === 0) {
                 showModal( "Co najmniej jedno pole jest puste" );
                 return false;
             }
@@ -75,7 +76,7 @@ $(function() {
         $.ajax({
                 url: '/rest/rest.php/book',
                 method: 'GET',
-                dataType: 'json',
+                dataType: 'json'
                 
             }).done( function (result) {
                 for( var i =0; i < result.success.length; i++) {
@@ -100,7 +101,7 @@ $(function() {
             $.ajax({
                     url: '/rest/rest.php/book/'+ id,
                     method: 'GET',
-                    dataType: 'json',
+                    dataType: 'json'
 
                 }).done( function (result) {
                     result.success[0].description;
@@ -128,7 +129,7 @@ $(function() {
             $.ajax({
                     url: '/rest/rest.php/book/'+ id,
                     method: 'DELETE',
-                    dataType: 'json',
+                    dataType: 'json'
 
                 }).done( function (result) {
                     divDesc.remove();
@@ -159,12 +160,14 @@ $(function() {
             var id = $("#bookEditSelect").val(); // val zwroci id ksiazki
             var title = $('body #title').eq(1).val();
             var description = $('body #description').eq(1).val();
+            var author_id = $('body #author_id_edit').val();
             
             var newBook = {
                 title: title,
-                description: description
+                description: description,
+                author_id: author_id
             };
-            
+            console.log(id);
              // AJAX
             $.ajax({
                 url: '../rest/rest.php/book/'+id,
@@ -175,8 +178,10 @@ $(function() {
                 
                 
             });
-        
-        
+            title = '';
+            description = '';
+            author_id = '';
+    
            $("#bookEdit").hide(); 
         });
 
@@ -184,6 +189,72 @@ $(function() {
     editBook();
     getAllBooks();
     
+    /*** AUTHORS ***/
+    
+    function getAllAuthors() {
+        
+        $.ajax({
+                url: '/rest/rest.php/author',
+                method: 'GET',
+                dataType: 'json'
+                
+            }).done( function (result) {
+                for( var i =0; i < result.success.length; i++) {
+                createAuthor(result.success[i]);
+                }
+            });
+        
+    }
+    
+    getAllAuthors();
+    
+    function createAuthor( author ) {
+    
+        var selectEdit = $("#author_id_edit");
+        var select = $('#author_id');
+        var option = $('<option value="'+ author.id + '"></option>');
+        var option2 = $('<option value="'+ author.id + '"></option>');
+        option.text(author.name + ' ' + author.surname);
+        option2.text(author.name + ' ' + author.surname);
+        selectEdit.append(option2);
+        select.append(option);
+        
+        
+    }
+    
    
+   function chooseAuthor() {
+        $(document).on('submit', "#author_id", function(e) {
+            e.preventDefault();
+            var id = $(this).attr("data-id"); 
+          
+             // AJAX
+            $.ajax({
+                url: '/rest/rest.php/author'+ id,
+                method: 'GET',
+                dataType: 'json'
+                
+            }).done( function (result) { 
+                
+            });
+        });
+        
+        $(document).on('submit', "#author_id_edit", function(e) {
+            e.preventDefault();
+            var id = $(this).attr("data-id"); 
+          
+             // AJAX
+            $.ajax({
+                url: '/rest/rest.php/author'+ id,
+                method: 'GET',
+                dataType: 'json'
+                
+            }).done( function (result) { 
+                
+            });
+        });
+
+    }
+    chooseAuthor();
     
 });

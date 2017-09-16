@@ -42,6 +42,7 @@ $(function() {
         var heading = $('<div class="panel-heading">');
         var authorTitle = $('<span class="authorTitle">');
         var remove = $('<button class="btn btn-danger pull-right btn-xs btn-author-remove"><i class="fa fa-trash"></i></button>');
+        var bookAuthor = $('<button class="btn btn-primary pull-right btn-xs btn-author-books"><i class="fa fa-book"></i></button>');
         
         var select = $("#authorEditSelect");
         var option = $('<option value="'+ author.id + '"></option>');
@@ -54,6 +55,7 @@ $(function() {
         authorTitle.text( author.name + ' ' + author.surname );
         heading.append( authorTitle );
         heading.append( remove );
+        heading.append( bookAuthor );
         
         remove.attr('data-id', author.id);
         
@@ -68,7 +70,7 @@ $(function() {
         $.ajax({
                 url: '/rest/rest.php/author',
                 method: 'GET',
-                dataType: 'json',
+                dataType: 'json'
                 
             }).done( function (result) {
                 for( var i =0; i < result.success.length; i++) {
@@ -139,7 +141,8 @@ $(function() {
                 
             });
         
-        
+            name = '';
+            surname = '';
            $("#authorEdit").hide(); 
         });
 
