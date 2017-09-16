@@ -43,6 +43,7 @@ $(function() {
         var authorTitle = $('<span class="authorTitle">');
         var remove = $('<button class="btn btn-danger pull-right btn-xs btn-author-remove"><i class="fa fa-trash"></i></button>');
         var bookAuthor = $('<button class="btn btn-primary pull-right btn-xs btn-author-books"><i class="fa fa-book"></i></button>');
+        var bookList = $('<ul class="authorBooksList"></ul>');
         
         var select = $("#authorEditSelect");
         var option = $('<option value="'+ author.id + '"></option>');
@@ -58,7 +59,9 @@ $(function() {
         heading.append( bookAuthor );
         
         remove.attr('data-id', author.id);
+        bookAuthor.attr('data-id', author.id);
         
+        panel.append( bookList );
         $("#authorsList").append( authorElement);
         
     }
@@ -149,6 +152,41 @@ $(function() {
     }
     editAuthor();
     getAllAuthors();
+    
+    /*** wyświetlenie opisu książki ***/
+    
+    function showListOfBooks() {
+        
+        
+        $(document).on('click', ".btn-author-books", function(e) {
+
+            e.preventDefault();
+            
+            var id = $(this).attr("data-id");
+            var div = $(this).parent().siblings(".authorBooksList");
+
+        
+            $.ajax({
+                    url: '/rest/rest.php/author/'+ id,
+                    method: 'GET',
+                    dataType: 'json'
+
+                }).done( function (result) {
+                   
+                    for( var i = 0; i < result.success[0].books.length; i++) {
+                        
+                        var li = $('<li>');
+                        div.append(li);
+                        li.text(result.success[0].books[i].title);
+                    }
+                        div.show();
+                });
+
+            
+            });
+        
+    }
+    showListOfBooks();
     
    
     

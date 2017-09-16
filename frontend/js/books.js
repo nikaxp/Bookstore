@@ -106,7 +106,6 @@ $(function() {
                 }).done( function (result) {
                     result.success[0].description;
                     divDesc.text(result.success[0].description).show();
-                    console.log(result);
 
                 });
 
